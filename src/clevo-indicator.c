@@ -339,7 +339,7 @@ static void main_ui_worker(int argc, char** argv) {
     //
     indicator = app_indicator_new(NAME, "brasero",
             APP_INDICATOR_CATEGORY_HARDWARE);
-    g_assert(IS_APP_INDICATOR(indicator));
+    g_assert(APP_INDICATOR(indicator));
     app_indicator_set_label(indicator, "Init..", "XX");
     app_indicator_set_status(indicator, APP_INDICATOR_STATUS_ATTENTION);
     app_indicator_set_ordering_index(indicator, -2);
@@ -388,7 +388,7 @@ static gboolean ui_update(gpointer user_data) {
     double load = ((double) share_info->fan_rpms) / MAX_FAN_RPM * 100.0;
     double load_r = round(load / 5.0) * 5.0;
     sprintf(icon_name, "brasero-disc-%02d", (int) load_r);
-    app_indicator_set_icon(indicator, icon_name);
+    app_indicator_set_icon_full(indicator, icon_name, NULL);
     return G_SOURCE_CONTINUE;
 }
 
@@ -500,7 +500,7 @@ static int ec_query_fan_rpms(void) {
 }
 
 static int ec_write_fan_duty(int duty_percentage) {
-    if (duty_percentage < 60 || duty_percentage > 100) {
+    if (duty_percentage < 25 || duty_percentage > 100) {
         printf("Wrong fan duty to write: %d\n", duty_percentage);
         return EXIT_FAILURE;
     }
